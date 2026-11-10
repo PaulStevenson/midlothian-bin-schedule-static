@@ -1,0 +1,213 @@
+[
+  {
+    "month": "November 2026",
+    "year": 2026,
+    "monthIndex": 10,
+    "days": 30,
+    "startDay": 6,
+    "collections": {
+      "9": ["Fd"],
+      "10": ["Fd"],
+      "11": ["Br", "Gy", "Fd"],
+      "17": ["Fd"],
+      "18": ["Rd", "Bl", "Fd"],
+      "24": ["Fd"],
+      "25": ["Gn", "Fd"]
+    }
+  },
+  {
+    "month": "December 2026",
+    "year": 2026,
+    "monthIndex": 11,
+    "days": 31,
+    "startDay": 1,
+    "collections": {
+      "1": ["Fd"],
+      "2": ["Rd", "Gy", "Fd"],
+      "8": ["Fd"],
+      "9": ["Bl", "Fd"],
+      "15": ["Fd"],
+      "16": ["Gn", "Rd", "Fd"],
+      "22": ["Fd"],
+      "23": ["Gy", "Fd"],
+      "29": ["Fd"],
+      "30": ["Rd", "Bl", "Fd"]
+    }
+  },
+  {
+    "month": "January 2027",
+    "year": 2027,
+    "monthIndex": 0,
+    "days": 31,
+    "startDay": 4,
+    "collections": {
+      "5": ["Fd"],
+      "6": ["Gn", "Fd"],
+      "12": ["Fd"],
+      "13": ["Rd", "Gy", "Fd"],
+      "19": ["Fd"],
+      "20": ["Bl", "Fd"],
+      "26": ["Fd"],
+      "27": ["Gn", "Rd", "Fd"]
+    }
+  },
+  {
+    "month": "February 2027",
+    "year": 2027,
+    "monthIndex": 1,
+    "days": 28,
+    "startDay": 0,
+    "collections": {
+      "2": ["Fd"],
+      "3": ["Gy", "Fd"],
+      "9": ["Fd"],
+      "10": ["Rd", "Bl", "Fd"],
+      "16": ["Fd"],
+      "17": ["Gn", "Fd"],
+      "23": ["Fd"],
+      "24": ["Rd", "Gy", "Fd"]
+    }
+  },
+  {
+    "month": "March 2027",
+    "year": 2027,
+    "monthIndex": 2,
+    "days": 31,
+    "startDay": 0,
+    "collections": {
+      "2": ["Fd"],
+      "3": ["Bl", "Fd"],
+      "9": ["Fd"],
+      "10": ["Gn", "Rd", "Fd"],
+      "16": ["Fd"],
+      "17": ["Gy", "Fd"],
+      "23": ["Fd"],
+      "24": ["Rd", "Bl", "Fd"],
+      "30": ["Fd"],
+      "31": ["Gn", "Fd"]
+    }
+  },
+  {
+    "month": "April 2027",
+    "year": 2027,
+    "monthIndex": 3,
+    "days": 30,
+    "startDay": 3,
+    "collections": {
+      "6": ["Fd"],
+      "7": ["Rd", "Gy", "Fd"],
+      "13": ["Fd"],
+      "14": ["Bl", "Fd"],
+      "20": ["Fd"],
+      "21": ["Gn", "Rd", "Fd"],
+      "27": ["Fd"],
+      "28": ["Gy", "Fd"]
+    }
+  },
+  {
+    "month": "May 2027",
+    "year": 2027,
+    "monthIndex": 4,
+    "days": 31,
+    "startDay": 5,
+    "collections": {
+      "4": ["Fd"],
+      "5": ["Rd", "Bl", "Fd"],
+      "11": ["Fd"],
+      "12": ["Gn", "Fd"],
+      "18": ["Fd"],
+      "19": ["Rd", "Gy", "Fd"],
+      "25": ["Fd"],
+      "26": ["Bl", "Fd"]
+    }
+  },
+  {
+    "month": "June 2027",
+    "year": 2027,
+    "monthIndex": 5,
+    "days": 30,
+    "startDay": 1,
+    "collections": {
+      "1": ["Fd"],
+      "2": ["Gn", "Rd", "Fd"],
+      "8": ["Fd"],
+      "9": ["Gy", "Fd"],
+      "15": ["Fd"],
+      "16": ["Rd", "Bl", "Fd"],
+      "22": ["Fd"],
+      "23": ["Gn", "Fd"],
+      "29": ["Fd"],
+      "30": ["Rd", "Gy", "Fd"]
+    }
+  },
+  {
+    "month": "July 2027",
+    "year": 2027,
+    "monthIndex": 6,
+    "days": 31,
+    "startDay": 3,
+    "collections": {
+      "6": ["Fd"],
+      "7": ["Bl", "Fd"],
+      "13": ["Fd"],
+      "14": ["Gn", "Rd", "Fd"],
+      "20": ["Fd"],
+      "21": ["Gy", "Fd"],
+      "27": ["Fd"],
+      "28": ["Rd", "Bl", "Fd"]
+    }
+  },
+  {
+    "month": "August 2027",
+    "year": 2027,
+    "monthIndex": 7,
+    "days": 31,
+    "startDay": 6,
+    "collections": {
+      "3": ["Fd"],
+      "4": ["Gn", "Fd"],
+      "10": ["Fd"],
+      "11": ["Rd", "Gy", "Fd"],
+      "17": ["Fd"],
+      "18": ["Bl", "Fd"],
+      "24": ["Fd"],
+      "25": ["Gn", "Rd", "Fd"],
+      "31": ["Fd"]
+    }
+  },
+  {
+    "month": "September 2027",
+    "year": 2027,
+    "monthIndex": 8,
+    "days": 30,
+    "startDay": 2,
+    "collections": {
+      "1": ["Gy", "Fd"],
+      "7": ["Fd"],
+      "8": ["Rd", "Bl", "Fd"],
+      "14": ["Fd"],
+      "15": ["Gn", "Fd"],
+      "21": ["Fd"],
+      "22": ["Rd", "Gy", "Fd"],
+      "28": ["Fd"],
+      "29": ["Bl", "Fd"]
+    }
+  },
+  {
+    "month": "October 2027",
+    "year": 2027,
+    "monthIndex": 9,
+    "days": 31,
+    "startDay": 4,
+    "collections": {
+      "5": ["Fd"],
+      "6": ["Gn", "Rd", "Fd"],
+      "12": ["Fd"],
+      "13": ["Gy", "Fd"],
+      "19": ["Fd"],
+      "20": ["Rd", "Bl", "Fd"],
+      "26": ["Fd"],
+      "27": ["Gn", "Fd"]
+    }
+  }
+]

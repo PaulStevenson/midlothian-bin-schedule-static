@@ -1,0 +1,132 @@
+{
+  "Fd": {
+    "id": "Fd",
+    "name": "Food Bin",
+    "fullName": "Food Caddy",
+    "color": "#374151",
+    "badgeClass": "bg-gray-700 text-white",
+    "frequency": "Weekly",
+    "summary": "For cooked and uncooked food waste.",
+    "acceptedItems": [
+      "Raw & cooked food",
+      "Meat, fish & bones",
+      "Fruit & vegetable peelings",
+      "Tea bags & coffee grounds",
+      "Plate scrapings",
+      "Dairy products & eggs"
+    ],
+    "rejectedItems": [
+      "Packaging of any kind",
+      "Liquids & oils",
+      "Garden waste",
+      "Pet waste"
+    ]
+  },
+  "Gy": {
+    "id": "Gy",
+    "name": "Grey Bin",
+    "fullName": "Grey Non-Recyclable Bin",
+    "color": "#6b7280",
+    "badgeClass": "bg-gray-500 text-white",
+    "frequency": "Every 3 weeks",
+    "summary": "For non-recyclable household materials.",
+    "acceptedItems": [
+      "General non-recyclable waste",
+      "Nappies & sanitary products",
+      "Plastic bags & film wrappers",
+      "Polystyrene & crisp packets",
+      "Broken toys & ceramics"
+    ],
+    "rejectedItems": [
+      "Recyclable card/paper",
+      "Glass bottles",
+      "Garden waste",
+      "Batteries & electricals"
+    ]
+  },
+  "Gn": {
+    "id": "Gn",
+    "name": "Green Bin",
+    "fullName": "Green Paper & Card Bin",
+    "color": "#15803d",
+    "badgeClass": "bg-green-700 text-white",
+    "frequency": "Every 3 weeks",
+    "summary": "For clean paper and cardboard.",
+    "acceptedItems": [
+      "Newspapers & magazines",
+      "Cardboard boxes (flattened)",
+      "Envelopes & office paper",
+      "Cereal boxes & food cartons (clean)",
+      "Junk mail & brochures"
+    ],
+    "rejectedItems": [
+      "Soiled paper or pizza boxes",
+      "Tissues & kitchen roll",
+      "Plastic wrap",
+      "Gift foil wrap"
+    ]
+  },
+  "Bl": {
+    "id": "Bl",
+    "name": "Blue Bin",
+    "fullName": "Blue Packaging Bin",
+    "color": "#1d4ed8",
+    "badgeClass": "bg-blue-600 text-white",
+    "frequency": "Every 3 weeks",
+    "summary": "For clean, dry plastics, cans, and cartons.",
+    "acceptedItems": [
+      "Plastic bottles (milk, drinks, shampoo)",
+      "Plastic tubs, trays & pots",
+      "Drink cans & food tins",
+      "Empty aerosols",
+      "Clean foil & drink cartons (Tetra Pak)"
+    ],
+    "rejectedItems": [
+      "Black plastic trays",
+      "Soft plastic bags/film",
+      "Expanded polystyrene",
+      "Glass bottles"
+    ]
+  },
+  "Rd": {
+    "id": "Rd",
+    "name": "Glass Box",
+    "fullName": "Red Glass Box",
+    "color": "#dc2626",
+    "badgeClass": "bg-red-600 text-white",
+    "frequency": "Every 4 weeks",
+    "summary": "For clean glass bottles and jars.",
+    "acceptedItems": [
+      "Clear & coloured glass bottles",
+      "Glass food jars",
+      "Non-food glass bottles (perfume, medicine)"
+    ],
+    "rejectedItems": [
+      "Drinking glasses & Pyrex",
+      "Window glass & mirrors",
+      "Light bulbs",
+      "Lids & caps (recycle separately)"
+    ]
+  },
+  "Br": {
+    "id": "Br",
+    "name": "Brown Bin",
+    "fullName": "Brown Garden Waste Bin",
+    "color": "#92400e",
+    "badgeClass": "bg-amber-800 text-white",
+    "frequency": "Seasonal / Every 4 weeks",
+    "summary": "For garden waste.",
+    "acceptedItems": [
+      "Grass clippings & weeds",
+      "Leaves & plant trimmings",
+      "Small twigs & branches",
+      "Cut flowers"
+    ],
+    "rejectedItems": [
+      "Soil, turf & stones",
+      "Food waste",
+      "Plastic bags",
+      "Treated wood & timber"
+    ]
+  }
+}
