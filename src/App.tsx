@@ -14,7 +14,7 @@ import {
 import binsConfigData from './data/bins-config.json'
 import scheduleData from './data/schedule-data.json'
 
-type BinKey = 'Fd' | 'Gy' | 'Gn' | 'Bl' | 'Rd' | 'Br'
+export type BinKey = 'Fd' | 'Gy' | 'Gn' | 'Bl' | 'Rd' | 'Br'
 
 type BinConfig = {
   id: BinKey
