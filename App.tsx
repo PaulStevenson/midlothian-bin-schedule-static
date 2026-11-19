@@ -1,13 +1,13 @@
 import React, { useState, useEffect, useMemo, useCallback } from 'react';
-import { 
-  Trash2, 
-  RefreshCw, 
-  Calendar as CalendarIcon, 
-  Info, 
-  Printer, 
-  Filter, 
-  Clock, 
-  CheckCircle2, 
+import {
+  Trash2,
+  RefreshCw,
+  Calendar as CalendarIcon,
+  Info,
+  Printer,
+  Filter,
+  Clock,
+  CheckCircle2,
   AlertTriangle,
   ChevronRight,
   Sparkles,
@@ -191,10 +191,10 @@ export function calculateNextCollections(nowDate) {
         if (bins.includes(binKey)) {
           const dayNum = parseInt(dayStr, 10);
           const candidateDate = new Date(monthData.year, monthData.monthIndex, dayNum);
-          
-          if (candidateDate >= today) {
+
+          if (candidateDate > today) {
             if (!earliestDate || candidateDate < earliestDate) {
-              earliestDate = candidateDate;
+              earliestDate = candidateDate
             }
           }
         }
@@ -229,6 +229,34 @@ export function getUpcomingHighlight(nextCollectionsMap) {
     }
   });
   return nearest;
+}
+
+export function getActionRequiredCollections(nowDate) {
+  const today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate())
+
+  for (let daysAhead = 0; daysAhead <= 1; daysAhead += 1) {
+    const actionDate = new Date(today)
+    actionDate.setDate(today.getDate() + daysAhead)
+
+    const binKeys = []
+    CALENDAR_DATA.forEach((monthData) => {
+      if (monthData.year === actionDate.getFullYear() && monthData.monthIndex === actionDate.getMonth()) {
+        const dateBins = monthData.collections[String(actionDate.getDate())]
+        if (dateBins) binKeys.push(...dateBins)
+      }
+    })
+
+    if (binKeys.length > 0) {
+      return {
+        date: actionDate,
+        binKeys: [...new Set(binKeys)],
+        isToday: daysAhead === 0,
+        isTomorrow: daysAhead === 1,
+      }
+    }
+  }
+
+  return null
 }
 
 // ==========================================
@@ -268,7 +296,7 @@ function usePWAManager() {
         }
       ]
     };
-    
+
     const blob = new Blob([JSON.stringify(manifestObj)], { type: 'application/json' });
     const manifestURL = URL.createObjectURL(blob);
     let manifestLink = document.querySelector('link[rel="manifest"]');
@@ -411,10 +439,10 @@ function UpcomingHighlightCard({ collection }) {
             <div className="text-xs text-slate-400 uppercase font-bold tracking-wider">Collection Date</div>
             <div className="text-lg font-extrabold text-white">{collection.formatted}</div>
             <div className="text-xs text-green-400 font-semibold mt-0.5">
-              {collection.isToday 
-                ? '⚠️ Put out bin today!' 
-                : collection.isTomorrow 
-                ? '⏰ Put out bin tomorrow night!' 
+              {collection.isToday
+                ? '⚠️ Put out bin today!'
+                : collection.isTomorrow
+                ? '⏰ Put out bin tomorrow night!'
                 : `In ${collection.daysLeft} days`}
             </div>
           </div>
@@ -463,15 +491,15 @@ function CalendarGrid({ filterBin, now }) {
     <div>
       <div className="flex items-center justify-between mb-4">
         <h2 className="text-lg font-bold text-slate-900 flex items-center gap-2">
-          <CalendarIcon className="w-5 h-5 text-slate-600" /> 
+          <CalendarIcon className="w-5 h-5 text-slate-600" />
           Collection Calendar (Nov 2026 – Oct 2027)
         </h2>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
         {CALENDAR_DATA.map((monthData, idx) => (
-          <div 
-            key={idx} 
+          <div
+            key={idx}
             className="bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden flex flex-col print:break-inside-avoid"
           >
             <div className="bg-slate-800 text-white py-2 px-3 text-center font-bold text-sm">
@@ -498,14 +526,14 @@ function CalendarGrid({ filterBin, now }) {
                         const isValidDay = dayNum > 0 && dayNum <= monthData.days;
                         const collectionBins = isValidDay ? (monthData.collections[dayNum] || []) : [];
 
-                        const isToday = isValidDay && 
-                          now.getFullYear() === monthData.year && 
-                          now.getMonth() === monthData.monthIndex && 
+                        const isToday = isValidDay &&
+                          now.getFullYear() === monthData.year &&
+                          now.getMonth() === monthData.monthIndex &&
                           now.getDate() === dayNum;
 
                         return (
-                          <td 
-                            key={colIndex} 
+                          <td
+                            key={colIndex}
                             className={`h-11 border border-slate-50 align-top p-0.5 text-center transition ${
                               isToday ? 'bg-amber-100/80 font-bold border-2 border-amber-500 rounded-sm' : ''
                             }`}
@@ -561,13 +589,13 @@ function BinSummaries({ nextCollectionsMap, onInspectGuide }) {
         {Object.entries(BINS_CONFIG).map(([key, config]) => {
           const nextData = nextCollectionsMap[key];
           return (
-            <div 
-              key={key} 
+            <div
+              key={key}
               className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col justify-between transition hover:shadow-md"
             >
               <div>
                 <div className="h-3 w-full" style={{ backgroundColor: config.color }}></div>
-                
+
                 <div className="p-5">
                   <div className="flex items-center justify-between mb-2">
                     <h3 className="text-xl font-bold text-slate-900">{config.name}</h3>
@@ -621,8 +649,8 @@ function RecyclingGuide() {
 
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {Object.entries(BINS_CONFIG).map(([key, config]) => (
-          <div 
-            key={key} 
+          <div
+            key={key}
             className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6 flex flex-col justify-between"
           >
             <div>
@@ -676,7 +704,7 @@ function RecyclingGuide() {
 export default function App() {
   const [selectedFilter, setSelectedFilter] = useState('ALL');
   const [activeTab, setActiveTab] = useState('grid');
-  
+
   const now = useClock();
   const { showInstallBanner, triggerInstall, dismissBanner } = usePWAManager();
 
@@ -704,8 +732,8 @@ export default function App() {
             <button
               onClick={() => setActiveTab('grid')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition ${
-                activeTab === 'grid' 
-                  ? 'bg-white text-slate-900 shadow-sm' 
+                activeTab === 'grid'
+                  ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -714,8 +742,8 @@ export default function App() {
             <button
               onClick={() => setActiveTab('summary')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition ${
-                activeTab === 'summary' 
-                  ? 'bg-white text-slate-900 shadow-sm' 
+                activeTab === 'summary'
+                  ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -724,8 +752,8 @@ export default function App() {
             <button
               onClick={() => setActiveTab('guide')}
               className={`flex items-center gap-2 px-4 py-2 rounded-lg font-semibold text-sm transition ${
-                activeTab === 'guide' 
-                  ? 'bg-white text-slate-900 shadow-sm' 
+                activeTab === 'guide'
+                  ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -733,9 +761,9 @@ export default function App() {
             </button>
           </div>
 
-          <FilterBar 
-            selectedFilter={selectedFilter} 
-            onSelectFilter={setSelectedFilter} 
+          <FilterBar
+            selectedFilter={selectedFilter}
+            onSelectFilter={setSelectedFilter}
           />
         </div>
 
@@ -745,9 +773,9 @@ export default function App() {
         </div>
 
         <div className={`mt-8 ${activeTab === 'summary' ? 'block' : 'hidden print:block'}`}>
-          <BinSummaries 
-            nextCollectionsMap={nextCollectionsMap} 
-            onInspectGuide={handleInspectGuide} 
+          <BinSummaries
+            nextCollectionsMap={nextCollectionsMap}
+            onInspectGuide={handleInspectGuide}
           />
         </div>
 

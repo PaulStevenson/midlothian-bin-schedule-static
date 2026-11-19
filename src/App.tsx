@@ -77,7 +77,7 @@ export function calculateNextCollections(nowDate: Date): Record<BinKey, NextColl
           const dayNum = Number.parseInt(dayStr, 10)
           const candidateDate = new Date(monthData.year, monthData.monthIndex, dayNum)
 
-          if (candidateDate >= today) {
+          if (candidateDate > today) {
             if (!earliestDate || candidateDate < earliestDate) {
               earliestDate = candidateDate
             }
@@ -284,7 +284,7 @@ function UpcomingHighlightCard({ collection }: { collection: UpcomingCollection 
   const config = BINS_CONFIG[collection.binKey]
 
   return (
-    <div className="mb-8 rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-xl print:hidden">
+    <div className="h-full rounded-2xl border border-slate-800 bg-slate-900 p-6 text-white shadow-xl print:hidden">
       <div className="flex flex-col items-start justify-between gap-6 md:flex-row md:items-center">
         <div>
           <div className="mb-2 flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-green-400">
@@ -316,6 +316,63 @@ function UpcomingHighlightCard({ collection }: { collection: UpcomingCollection 
           </div>
         </div>
       </div>
+    </div>
+  )
+}
+
+function ActionRequiredCard({ collection }: { collection: ActionCollection | null }) {
+  if (!collection) return null
+
+  const heading = collection.isToday ? 'Collection Today' : 'Collection Tomorrow'
+  const instruction = collection.isToday
+    ? 'Put your bin out now'
+    : 'Put your bin out tonight'
+
+  return (
+    <div className="rounded-2xl border-2 border-amber-400 bg-amber-50 p-6 text-slate-950 shadow-xl print:hidden">
+      <div className="mb-3 flex items-center gap-2 text-xs font-black uppercase tracking-wider text-amber-700">
+        <AlertTriangle className="h-5 w-5" /> Action Required
+      </div>
+      <h2 className="text-xl font-black sm:text-2xl">{heading}</h2>
+      <p className="mt-1 text-sm font-semibold text-slate-700">{instruction}</p>
+
+      <div className="mt-4 flex flex-wrap gap-2">
+        {collection.binKeys.map((binKey) => {
+          const config = BINS_CONFIG[binKey]
+          return (
+            <span
+              key={binKey}
+              className="inline-flex items-center gap-2 rounded-lg bg-white px-3 py-2 text-sm font-bold shadow-sm"
+            >
+              <span className="h-3 w-3 rounded-full" style={{ backgroundColor: config.color }} />
+              {config.name}
+            </span>
+          )
+        })}
+      </div>
+    </div>
+  )
+}
+
+function TopCollectionCards({
+  actionCollection,
+  nextCollection,
+}: {
+  actionCollection: ActionCollection | null
+  nextCollection: UpcomingCollection | null
+}) {
+  if (!actionCollection) {
+    return (
+      <div className="mb-8">
+        <UpcomingHighlightCard collection={nextCollection} />
+      </div>
+    )
+  }
+
+  return (
+    <div className="mb-8 grid grid-cols-1 gap-4 md:grid-cols-2 print:hidden">
+      <ActionRequiredCard collection={actionCollection} />
+      <UpcomingHighlightCard collection={nextCollection} />
     </div>
   )
 }
@@ -589,6 +646,44 @@ function RecyclingGuide() {
   )
 }
 
+export type ActionCollection = {
+  date: Date
+  binKeys: BinKey[]
+  isToday: boolean
+  isTomorrow: boolean
+}
+
+export function getActionRequiredCollections(nowDate: Date): ActionCollection | null {
+  const today = new Date(nowDate.getFullYear(), nowDate.getMonth(), nowDate.getDate())
+
+  for (let daysAhead = 0; daysAhead <= 1; daysAhead += 1) {
+    const actionDate = new Date(today)
+    actionDate.setDate(today.getDate() + daysAhead)
+
+    const bins: BinKey[] = []
+    for (const monthData of CALENDAR_DATA) {
+      if (
+        monthData.year === actionDate.getFullYear() &&
+        monthData.monthIndex === actionDate.getMonth()
+      ) {
+        const dateBins = monthData.collections[String(actionDate.getDate())]
+        if (dateBins) bins.push(...dateBins)
+      }
+    }
+
+    if (bins.length > 0) {
+      return {
+        date: actionDate,
+        binKeys: Array.from(new Set(bins)),
+        isToday: daysAhead === 0,
+        isTomorrow: daysAhead === 1,
+      }
+    }
+  }
+
+  return null
+}
+
 export default function App() {
   const [selectedFilter, setSelectedFilter] = useState<'ALL' | BinKey>('ALL')
   const [activeTab, setActiveTab] = useState<'grid' | 'summary' | 'guide'>('grid')
@@ -600,6 +695,10 @@ export default function App() {
   const nearestCollection = useMemo(
     () => getUpcomingHighlight(nextCollectionsMap),
     [nextCollectionsMap],
+  )
+  const actionCollection = useMemo(
+    () => getActionRequiredCollections(now),
+    [now],
   )
 
   const handleInspectGuide = useCallback(() => {
@@ -615,7 +714,10 @@ export default function App() {
       )}
 
       <main className="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <UpcomingHighlightCard collection={nearestCollection} />
+        <TopCollectionCards
+          actionCollection={actionCollection}
+          nextCollection={nearestCollection}
+        />
 
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 print:hidden">
           <div className="flex items-center gap-2 rounded-xl bg-slate-200 p-1">
