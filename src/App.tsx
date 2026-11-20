@@ -15,8 +15,6 @@ import {
 import binsConfigData from './data/bins-config.json'
 import plasticTypesData from './data/plastic-types.json'
 import scheduleData from './data/schedule-data.json'
-import { usePushNotifications } from './hooks/usePushNotifications'
-import { ReminderCard } from './components/ReminderCard'
 
 export type BinKey = 'Fd' | 'Gy' | 'Gn' | 'Bl' | 'Rd' | 'Br' | 'Sp'
 
@@ -767,8 +765,6 @@ export default function App() {
 
   const now = useClock()
   const { showInstallBanner, triggerInstall, dismissBanner } = usePWAManager()
-  const { status: reminderStatus, message: reminderMessage, enableReminders, disableReminders } =
-    usePushNotifications()
 
   const nextCollectionsMap = useMemo(() => calculateNextCollections(now), [now])
   const nearestCollection = useMemo(
@@ -814,13 +810,6 @@ export default function App() {
       )}
 
       <main className="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
-        <ReminderCard
-          status={reminderStatus}
-          message={reminderMessage}
-          onEnable={enableReminders}
-          onDisable={disableReminders}
-        />
-
         <TopCollectionCards
           actionCollection={actionCollection}
           nextCollection={nearestCollection}

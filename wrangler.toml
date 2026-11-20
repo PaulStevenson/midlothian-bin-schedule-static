@@ -2,14 +2,3 @@ name = "midlothian-bin-schedule-static"
 main = "worker/index.ts"
 compatibility_date = "2026-11-20"
 compatibility_flags = ["nodejs_compat"]
-
-[[d1_databases]]
-binding = "DB"
-database_name = "midlothian-bin-schedule"
-database_id = "CHANGE_ME"
-
-[vars]
-POSTCODE = "EH25 9AW"
-
-[triggers]
-crons = ["*/15 17-19 * * *"]
