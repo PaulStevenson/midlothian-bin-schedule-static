@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo, useCallback } from 'react'
+import type { KeyboardEvent } from 'react'
 import {
   Trash2,
   Calendar as CalendarIcon,
@@ -205,7 +206,7 @@ function AppHeader({ onInstall, onPrint }: { onInstall: () => void; onPrint: () 
             <h1 className="text-2xl font-extrabold tracking-tight sm:text-3xl">
               Bin Collection Schedule
             </h1>
-            <p className="mt-1 text-sm text-slate-400 print:text-slate-600">
+            <p className="mt-1 text-sm text-slate-300 print:text-slate-600">
               Postcode:{' '}
               <span className="font-semibold text-slate-200 print:text-black">EH25 9AW</span>{' '}
               | Schedule valid: Nov 2026 - Oct 2027
@@ -252,7 +253,7 @@ function InstallBanner({ onInstall, onDismiss }: { onInstall: () => void; onDism
           </button>
           <button
             onClick={onDismiss}
-            className="shrink-0 text-xs text-slate-400 underline hover:text-white"
+            className="shrink-0 text-xs text-slate-300 underline hover:text-white"
           >
             Dismiss
           </button>
@@ -285,7 +286,7 @@ function UpcomingHighlightCard({ collection }: { collection: UpcomingCollection 
         <div className="flex shrink-0 items-center gap-4 rounded-xl border border-slate-700 bg-slate-800/80 px-6 py-4 backdrop-blur-sm">
           <CalendarIcon className="h-8 w-8 text-green-400" />
           <div>
-            <div className="text-xs font-bold uppercase tracking-wider text-slate-400">
+            <div className="text-xs font-bold uppercase tracking-wider text-slate-300">
               Collection Date
             </div>
             <div className="text-lg font-extrabold text-white">{collection.formatted}</div>
@@ -367,14 +368,19 @@ function FilterBar({
   selectedFilter: 'ALL' | BinKey
   onSelectFilter: (value: 'ALL' | BinKey) => void
 }) {
+  const selectedName = selectedFilter === 'ALL' ? 'All Bins' : BINS_CONFIG[selectedFilter].name
+
   return (
     <div className="flex flex-wrap items-center gap-1.5">
-      <span className="mr-1 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-slate-500">
-        <Filter className="h-3 w-3" /> Filter:
+      <span className="mr-1 flex items-center gap-1 text-xs font-bold uppercase tracking-wider text-slate-600">
+        <Filter className="h-3 w-3" aria-hidden="true" /> Filter:
       </span>
+      <span className="sr-only" aria-live="polite">Showing {selectedName}</span>
       <button
+        type="button"
+        aria-pressed={selectedFilter === 'ALL'}
         onClick={() => onSelectFilter('ALL')}
-        className={`rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+        className={`rounded-full px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 ${
           selectedFilter === 'ALL'
             ? 'bg-slate-900 text-white shadow-sm'
             : 'border border-slate-300 bg-white text-slate-600 hover:bg-slate-50'
@@ -384,15 +390,21 @@ function FilterBar({
       </button>
       {Object.entries(BINS_CONFIG).map(([key, config]) => (
         <button
+          type="button"
           key={key}
+          aria-pressed={selectedFilter === key}
           onClick={() => onSelectFilter(key as BinKey)}
-          className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition ${
+          className={`flex items-center gap-1.5 rounded-full px-3 py-1.5 text-xs font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 ${
             selectedFilter === key
               ? 'bg-slate-900 text-white shadow-sm'
               : 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
           }`}
         >
-          <span className="h-2 w-2 rounded-full" style={{ backgroundColor: config.color }}></span>
+          <span
+            className="h-2 w-2 rounded-full"
+            style={{ backgroundColor: config.color }}
+            aria-hidden="true"
+          ></span>
           {config.name}
         </button>
       ))}
@@ -405,7 +417,7 @@ function CalendarGrid({ filterBin, now }: { filterBin: 'ALL' | BinKey; now: Date
     <div>
       <div className="mb-4 flex items-center justify-between">
         <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
-          <CalendarIcon className="h-5 w-5 text-slate-600" />
+          <CalendarIcon className="h-5 w-5 text-slate-600" aria-hidden="true" />
           Collection Calendar (Nov 2026 - Oct 2027)
         </h2>
       </div>
@@ -427,7 +439,8 @@ function CalendarGrid({ filterBin, now }: { filterBin: 'ALL' | BinKey; now: Date
                     {WEEKDAY_LABELS.map((d) => (
                       <th
                         key={d}
-                        className="border-b border-slate-100 py-1 text-[10px] font-bold uppercase text-slate-400"
+                        scope="col"
+                        className="border-b border-slate-100 py-1 text-[10px] font-bold uppercase text-slate-600"
                       >
                         {d}
                       </th>
@@ -453,12 +466,22 @@ function CalendarGrid({ filterBin, now }: { filterBin: 'ALL' | BinKey; now: Date
                           now.getMonth() === monthData.monthIndex &&
                           now.getDate() === dayNum
 
+                        const collectionDescription = collectionBins
+                          .map((binKey) => BINS_CONFIG[binKey]?.name)
+                          .filter(Boolean)
+                          .join(', ')
+
                         return (
                           <td
                             key={colIndex}
+                            aria-label={
+                              isValidDay
+                                ? `${monthData.month} ${dayNum}${isToday ? ', today' : ''}${collectionDescription ? `, ${collectionDescription} collection` : ''}`
+                                : undefined
+                            }
                             className={`h-11 border border-slate-50 p-0.5 text-center align-top transition ${
                               isToday
-                                ? 'rounded-sm border-2 border-amber-500 bg-amber-100/80 font-bold'
+                                ? 'rounded-sm border-2 border-amber-700 bg-amber-100/80 font-bold'
                                 : ''
                             }`}
                           >
@@ -466,11 +489,17 @@ function CalendarGrid({ filterBin, now }: { filterBin: 'ALL' | BinKey; now: Date
                               <div className="flex h-full flex-col justify-between">
                                 <span
                                   className={`text-[10px] ${
-                                    isToday ? 'font-extrabold text-amber-900' : 'text-slate-500'
+                                    isToday ? 'font-extrabold text-amber-950' : 'text-slate-600'
                                   }`}
                                 >
                                   {dayNum}
+                                  {isToday && <span className="sr-only">, today</span>}
                                 </span>
+                                {isToday && (
+                                  <span className="text-[7px] font-black uppercase leading-none text-amber-950" aria-hidden="true">
+                                    Today
+                                  </span>
+                                )}
                                 <div className="mt-0.5 flex flex-wrap justify-center gap-0.5">
                                   {collectionBins.map((binKey) => {
                                     const config = BINS_CONFIG[binKey]
@@ -478,11 +507,12 @@ function CalendarGrid({ filterBin, now }: { filterBin: 'ALL' | BinKey; now: Date
                                     return (
                                       <span
                                         key={binKey}
+                                        aria-label={`${config?.name} collection`}
                                         title={`${config?.name} collection`}
                                         className={`rounded px-1 text-[9px] font-black tracking-tight text-white ${
-                                          isDimmed ? 'opacity-20' : 'opacity-100'
+                                          isDimmed ? 'sr-only' : 'opacity-100'
                                         }`}
-                                        style={{ backgroundColor: config?.color || '#333' }}
+                                        style={isDimmed ? undefined : { backgroundColor: config?.color || '#333' }}
                                       >
                                         {binKey}
                                       </span>
@@ -542,11 +572,11 @@ function BinSummaries({
 
                   <div className="space-y-2 rounded-xl border border-slate-100 bg-slate-50 p-3">
                     <div className="flex items-center justify-between text-xs">
-                      <span className="font-medium text-slate-500">Frequency:</span>
+                      <span className="font-medium text-slate-600">Frequency:</span>
                       <span className="font-bold text-slate-800">{config.frequency}</span>
                     </div>
                     <div className="flex items-center justify-between border-t border-slate-200/60 pt-2 text-xs">
-                      <span className="font-medium text-slate-500">Next Collection:</span>
+                      <span className="font-medium text-slate-600">Next Collection:</span>
                       <span className="rounded border border-slate-200 bg-white px-2 py-0.5 font-bold text-slate-900">
                         {nextData?.formatted || 'N/A'}
                       </span>
@@ -556,7 +586,7 @@ function BinSummaries({
               </div>
 
               <div className="flex items-center justify-between border-t border-slate-100 bg-slate-50/50 p-4">
-                <span className="text-xs font-semibold text-slate-500">EH25 9AW Kerbside</span>
+                <span className="text-xs font-semibold text-slate-600">EH25 9AW Kerbside</span>
                 <button
                   onClick={onInspectGuide}
                   className="inline-flex items-center gap-1 text-xs font-bold text-slate-700 hover:text-slate-900"
@@ -601,7 +631,7 @@ function RecyclingGuide() {
                 <div className="h-8 w-4 rounded" style={{ backgroundColor: config.color }}></div>
                 <div>
                   <h3 className="text-lg font-bold text-slate-900">{config.fullName}</h3>
-                  <span className="text-xs font-semibold text-slate-500">{config.frequency}</span>
+                  <span className="text-xs font-semibold text-slate-600">{config.frequency}</span>
                 </div>
               </div>
 
@@ -664,13 +694,13 @@ function RecyclingGuide() {
                   </td>
                   <td className="px-4 py-3 align-top">
                     <div className="font-semibold text-slate-900">{item.plasticType}</div>
-                    <div className="mt-1 text-[11px] text-slate-500">{item.notes}</div>
+                    <div className="mt-1 text-[11px] text-slate-600">{item.notes}</div>
                   </td>
                   <td className="px-4 py-3 align-top">
                     <ul className="space-y-1">
                       {item.typicalItems.map((example) => (
                         <li key={example} className="flex items-start gap-1.5">
-                          <span className="font-bold text-slate-400">•</span>
+                          <span className="font-bold text-slate-600" aria-hidden="true">•</span>
                           <span>{example}</span>
                         </li>
                       ))}
@@ -754,6 +784,27 @@ export default function App() {
     setActiveTab('guide')
   }, [])
 
+  const handleTabKeyDown = useCallback(
+    (event: KeyboardEvent<HTMLButtonElement>, tab: 'grid' | 'summary' | 'guide') => {
+      const tabs: Array<'grid' | 'summary' | 'guide'> = ['grid', 'summary', 'guide']
+      const currentIndex = tabs.indexOf(tab)
+      let nextIndex: number | null = null
+
+      if (event.key === 'ArrowRight') nextIndex = (currentIndex + 1) % tabs.length
+      if (event.key === 'ArrowLeft') nextIndex = (currentIndex - 1 + tabs.length) % tabs.length
+      if (event.key === 'Home') nextIndex = 0
+      if (event.key === 'End') nextIndex = tabs.length - 1
+
+      if (nextIndex !== null) {
+        event.preventDefault()
+        const nextTab = tabs[nextIndex]
+        setActiveTab(nextTab)
+        document.getElementById(`tab-${nextTab}`)?.focus()
+      }
+    },
+    [],
+  )
+
   return (
     <div className="min-h-screen bg-slate-100 pb-12 font-sans text-slate-800">
       <AppHeader onInstall={triggerInstall} onPrint={() => window.print()} />
@@ -776,59 +827,99 @@ export default function App() {
         />
 
         <div className="mb-6 flex flex-wrap items-center justify-between gap-4 border-b border-slate-200 pb-4 print:hidden">
-          <div className="flex items-center gap-2 rounded-xl bg-slate-200 p-1">
+          <div
+            className="flex items-center gap-2 rounded-xl bg-slate-200 p-1"
+            role="tablist"
+            aria-label="Schedule views"
+          >
             <button
+              id="tab-grid"
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'grid'}
+              aria-controls="panel-grid"
+              tabIndex={activeTab === 'grid' ? 0 : -1}
               onClick={() => setActiveTab('grid')}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition ${
+              onKeyDown={(event) => handleTabKeyDown(event, 'grid')}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 ${
                 activeTab === 'grid'
                   ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <CalendarIcon className="h-4 w-4" /> 12-Month Calendar
+              <CalendarIcon className="h-4 w-4" aria-hidden="true" /> 12-Month Calendar
             </button>
             <button
+              id="tab-summary"
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'summary'}
+              aria-controls="panel-summary"
+              tabIndex={activeTab === 'summary' ? 0 : -1}
               onClick={() => setActiveTab('summary')}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition ${
+              onKeyDown={(event) => handleTabKeyDown(event, 'summary')}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 ${
                 activeTab === 'summary'
                   ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <Trash2 className="h-4 w-4" /> Bin Summaries &amp; Frequencies
+              <Trash2 className="h-4 w-4" aria-hidden="true" /> Bin Summaries &amp; Frequencies
             </button>
             <button
+              id="tab-guide"
+              type="button"
+              role="tab"
+              aria-selected={activeTab === 'guide'}
+              aria-controls="panel-guide"
+              tabIndex={activeTab === 'guide' ? 0 : -1}
               onClick={() => setActiveTab('guide')}
-              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition ${
+              onKeyDown={(event) => handleTabKeyDown(event, 'guide')}
+              className={`flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-semibold transition focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 ${
                 activeTab === 'guide'
                   ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
-              <Info className="h-4 w-4" /> Recycling Guide
+              <Info className="h-4 w-4" aria-hidden="true" /> Recycling Guide
             </button>
           </div>
 
           <FilterBar selectedFilter={selectedFilter} onSelectFilter={setSelectedFilter} />
         </div>
 
-        <div className={activeTab === 'grid' ? 'block' : 'hidden print:block'}>
+        <div
+          id="panel-grid"
+          role="tabpanel"
+          aria-labelledby="tab-grid"
+          className={activeTab === 'grid' ? 'block' : 'hidden print:block'}
+        >
           <CalendarGrid filterBin={selectedFilter} now={now} />
         </div>
 
-        <div className={`mt-8 ${activeTab === 'summary' ? 'block' : 'hidden print:block'}`}>
+        <div
+          id="panel-summary"
+          role="tabpanel"
+          aria-labelledby="tab-summary"
+          className={`mt-8 ${activeTab === 'summary' ? 'block' : 'hidden print:block'}`}
+        >
           <BinSummaries
             nextCollectionsMap={nextCollectionsMap}
             onInspectGuide={handleInspectGuide}
           />
         </div>
 
-        <div className={`mt-8 ${activeTab === 'guide' ? 'block' : 'hidden print:block'}`}>
+        <div
+          id="panel-guide"
+          role="tabpanel"
+          aria-labelledby="tab-guide"
+          className={`mt-8 ${activeTab === 'guide' ? 'block' : 'hidden print:block'}`}
+        >
           <RecyclingGuide />
         </div>
       </main>
 
-      <footer className="mx-auto mt-12 max-w-7xl border-t border-slate-200 px-4 pt-6 text-center text-xs text-slate-500 print:hidden sm:px-6 lg:px-8">
+      <footer className="mx-auto mt-12 max-w-7xl border-t border-slate-200 px-4 pt-6 text-center text-xs text-slate-600 print:hidden sm:px-6 lg:px-8">
         <p>Midlothian Council Kerbside Bin Schedule App | Postcode: EH25 9AW</p>
         <p className="mt-1">
           Collection details are correct at time of publishing. Always present bins by

@@ -50,4 +50,17 @@ describe('ReminderCard', () => {
 
     expect(screen.queryByRole('button')).toBeNull()
   })
+
+  it('exposes enabled state through aria-pressed', () => {
+    render(
+      <ReminderCard
+        status="enabled"
+        message="Reminders are enabled."
+        onEnable={vi.fn()}
+        onDisable={vi.fn()}
+      />,
+    )
+
+    expect(screen.getByRole('button', { name: 'Turn off reminders' })).toHaveAttribute('aria-pressed', 'true')
+  })
 })

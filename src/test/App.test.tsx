@@ -56,7 +56,7 @@ describe('App interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('button', { name: 'Bin Summaries & Frequencies' }))
+    await user.click(screen.getByRole('tab', { name: 'Bin Summaries & Frequencies' }))
 
     expect(screen.getByText('Bin Summaries & Collection Frequencies')).toBeTruthy()
   })
@@ -65,7 +65,7 @@ describe('App interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('button', { name: 'Recycling Guide' }))
+    await user.click(screen.getByRole('tab', { name: 'Recycling Guide' }))
 
     expect(screen.getByText('What Goes in Your Bins? (Acceptance Guide)')).toBeTruthy()
   })
@@ -74,7 +74,7 @@ describe('App interactions', () => {
     const user = userEvent.setup()
     render(<App />)
 
-    await user.click(screen.getByRole('button', { name: 'Recycling Guide' }))
+    await user.click(screen.getByRole('tab', { name: 'Recycling Guide' }))
 
     expect(screen.getByText('Plastic Type Identifier')).toBeTruthy()
     expect(screen.getByText('Resin Code')).toBeTruthy()
@@ -101,5 +101,32 @@ describe('App interactions', () => {
 
     expect(printSpy).toHaveBeenCalledOnce()
     printSpy.mockRestore()
+  })
+
+  it('exposes selected tab and filter state to assistive technology', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const calendarTab = screen.getByRole('tab', { name: '12-Month Calendar' })
+    expect(calendarTab).toHaveAttribute('aria-selected', 'true')
+
+    await user.click(screen.getByRole('button', { name: 'Blue Bin' }))
+    expect(screen.getByRole('button', { name: 'Blue Bin' })).toHaveAttribute('aria-pressed', 'true')
+
+    await user.click(screen.getByRole('tab', { name: 'Recycling Guide' }))
+    expect(screen.getByRole('tab', { name: 'Recycling Guide' })).toHaveAttribute('aria-selected', 'true')
+  })
+
+  it('supports arrow-key tab navigation', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    const calendarTab = screen.getByRole('tab', { name: '12-Month Calendar' })
+    calendarTab.focus()
+    await user.keyboard('{ArrowRight}')
+
+    const summaryTab = screen.getByRole('tab', { name: 'Bin Summaries & Frequencies' })
+    expect(summaryTab).toHaveFocus()
+    expect(summaryTab).toHaveAttribute('aria-selected', 'true')
   })
 })

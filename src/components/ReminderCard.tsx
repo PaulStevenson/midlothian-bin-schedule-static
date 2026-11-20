@@ -32,22 +32,29 @@ export function ReminderCard({
       {status !== 'unsupported' && status !== 'denied' && (
         <button
           type="button"
+          aria-pressed={enabled}
           onClick={enabled ? onDisable : onEnable}
           disabled={status === 'loading'}
-          className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition disabled:cursor-wait disabled:opacity-60 ${
+          className={`inline-flex shrink-0 items-center justify-center gap-2 rounded-lg px-4 py-2 text-sm font-bold transition disabled:cursor-wait disabled:opacity-60 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sky-600 ${
             enabled
               ? 'border border-slate-300 bg-white text-slate-700 hover:bg-slate-50'
               : 'bg-green-600 text-white hover:bg-green-700'
           }`}
         >
-          {status === 'loading' ? <LoaderCircle className="h-4 w-4 animate-spin" /> : null}
+          {status === 'loading' ? <LoaderCircle className="h-4 w-4 animate-spin" aria-hidden="true" /> : null}
           {enabled ? 'Turn off reminders' : 'Enable reminders'}
         </button>
       )}
 
       {status === 'denied' && (
-        <span className="text-xs font-semibold text-amber-700">Change notification permission in browser settings</span>
+        <span className="text-xs font-semibold text-amber-800" aria-live="polite">
+          Change notification permission in browser settings
+        </span>
       )}
+
+      <span className="sr-only" aria-live="polite">
+        {status === 'enabled' ? 'Collection reminders enabled' : status === 'disabled' ? 'Collection reminders disabled' : ''}
+      </span>
     </section>
   )
 }
