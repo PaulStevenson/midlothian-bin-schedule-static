@@ -1,4 +1,4 @@
-import webpush from 'web-push'
+import { setVapidDetails, sendNotification } from 'web-push'
 import scheduleData from '../src/data/schedule-data.json'
 
 interface Env {
@@ -64,7 +64,7 @@ export default {
     const binKeys = month?.collections[String(tomorrow.day)] || []
     if (binKeys.length === 0) return
 
-    webpush.setVapidDetails(
+    setVapidDetails(
       env.VAPID_SUBJECT || 'mailto:admin@example.com',
       env.VAPID_PUBLIC_KEY,
       env.VAPID_PRIVATE_KEY,
@@ -95,7 +95,7 @@ export default {
       if (existing) continue
 
       try {
-        await webpush.sendNotification(
+        await sendNotification(
           {
             endpoint: row.endpoint,
             keys: { p256dh: row.p256dh, auth: row.auth },
