@@ -13,6 +13,8 @@ import {
 } from 'lucide-react'
 import binsConfigData from './data/bins-config.json'
 import scheduleData from './data/schedule-data.json'
+import { usePushNotifications } from './hooks/usePushNotifications'
+import { ReminderCard } from './components/ReminderCard'
 
 export type BinKey = 'Fd' | 'Gy' | 'Gn' | 'Bl' | 'Rd' | 'Br'
 
@@ -136,49 +138,16 @@ function usePWAManager() {
   const [showInstallBanner, setShowInstallBanner] = useState(true)
 
   useEffect(() => {
-    const manifestObj = {
-      name: 'Midlothian Bin Schedule',
-      short_name: 'Bin Schedule',
-      description: 'Kerbside Bin Collection Guide & Calendar for EH25 9AW',
-      start_url: './',
-      display: 'standalone',
-      background_color: '#0f172a',
-      theme_color: '#0f172a',
-      icons: [
-        {
-          src: "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' rx='20' fill='%2315803d'/><text y='65' x='50' text-anchor='middle' font-size='50' fill='white'>🗑️</text></svg>",
-          sizes: '192x192 512x512',
-          type: 'image/svg+xml',
-          purpose: 'any maskable',
-        },
-      ],
-    }
-
-    const blob = new Blob([JSON.stringify(manifestObj)], {
-      type: 'application/json',
-    })
-    const manifestURL = URL.createObjectURL(blob)
     let manifestLink = document.querySelector<HTMLLinkElement>('link[rel="manifest"]')
     if (!manifestLink) {
       manifestLink = document.createElement('link')
       manifestLink.rel = 'manifest'
       document.head.appendChild(manifestLink)
     }
-    manifestLink.href = manifestURL
+    manifestLink.href = '/manifest.webmanifest'
 
     if ('serviceWorker' in navigator) {
-      const swCode = `
-        const CACHE_NAME = 'bin-schedule-v2';
-        self.addEventListener('install', (e) => {
-          e.waitUntil(caches.open(CACHE_NAME).then((cache) => cache.addAll(['./'])));
-          self.skipWaiting();
-        });
-        self.addEventListener('fetch', (e) => {
-          e.respondWith(caches.match(e.request).then((res) => res || fetch(e.request)));
-        });
-      `
-      const swBlob = new Blob([swCode], { type: 'application/javascript' })
-      navigator.serviceWorker.register(URL.createObjectURL(swBlob)).catch(() => {})
+      navigator.serviceWorker.register('/sw.js').catch(() => {})
     }
 
     const handleBeforeInstall = (e: Event) => {
@@ -690,6 +659,8 @@ export default function App() {
 
   const now = useClock()
   const { showInstallBanner, triggerInstall, dismissBanner } = usePWAManager()
+  const { status: reminderStatus, message: reminderMessage, enableReminders, disableReminders } =
+    usePushNotifications()
 
   const nextCollectionsMap = useMemo(() => calculateNextCollections(now), [now])
   const nearestCollection = useMemo(
@@ -714,6 +685,13 @@ export default function App() {
       )}
 
       <main className="mx-auto mt-6 max-w-7xl px-4 sm:px-6 lg:px-8">
+        <ReminderCard
+          status={reminderStatus}
+          message={reminderMessage}
+          onEnable={enableReminders}
+          onDisable={disableReminders}
+        />
+
         <TopCollectionCards
           actionCollection={actionCollection}
           nextCollection={nearestCollection}

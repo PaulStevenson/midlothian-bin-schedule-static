@@ -58,7 +58,7 @@ describe('getActionRequiredCollections', () => {
 
     expect(result).toEqual<ActionCollection>({
       date: localDate(2026, 11, 18),
-      binKeys: ['Rd', 'Bl', 'Fd'],
+      binKeys: ['Rd', 'Bl'],
       isToday: true,
       isTomorrow: false,
     })
