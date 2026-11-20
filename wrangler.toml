@@ -2,3 +2,8 @@ name = "midlothian-bin-schedule-static"
 main = "worker/index.ts"
 compatibility_date = "2026-11-20"
 compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = "./dist"
+binding = "ASSETS"
+not_found_handling = "single-page-application"

@@ -1,8 +1,11 @@
+interface Env {
+  ASSETS: {
+    fetch(request: Request): Promise<Response>
+  }
+}
+
 export default {
-  async fetch(_request: Request): Promise<Response> {
-    return new Response('Push reminders are temporarily disabled.', {
-      status: 503,
-      headers: { 'Content-Type': 'text/plain' },
-    })
+  async fetch(request: Request, env: Env): Promise<Response> {
+    return env.ASSETS.fetch(request)
   },
 }
