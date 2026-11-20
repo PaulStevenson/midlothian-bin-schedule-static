@@ -3,7 +3,7 @@ import { BINS_CONFIG, CALENDAR_DATA, type BinKey } from '../App'
 
 describe('schedule data', () => {
   it('contains one configuration for every supported bin key', () => {
-    const binKeys = ['Fd', 'Gy', 'Gn', 'Bl', 'Rd', 'Br'] as BinKey[]
+    const binKeys = ['Fd', 'Gy', 'Gn', 'Bl', 'Rd', 'Br', 'Sp'] as BinKey[]
 
     expect(Object.keys(BINS_CONFIG)).toEqual(binKeys)
     for (const binKey of binKeys) {

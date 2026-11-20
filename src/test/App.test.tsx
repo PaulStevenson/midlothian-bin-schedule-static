@@ -70,6 +70,19 @@ describe('App interactions', () => {
     expect(screen.getByText('What Goes in Your Bins? (Acceptance Guide)')).toBeTruthy()
   })
 
+  it('shows plastic type identifier with route labels', async () => {
+    const user = userEvent.setup()
+    render(<App />)
+
+    await user.click(screen.getByRole('button', { name: 'Recycling Guide' }))
+
+    expect(screen.getByText('Plastic Type Identifier')).toBeTruthy()
+    expect(screen.getByText('Resin Code')).toBeTruthy()
+    expect(screen.getAllByText('Kerbside').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Supermarket drop-off').length).toBeGreaterThan(0)
+    expect(screen.getAllByText('Not accepted').length).toBeGreaterThan(0)
+  })
+
   it('allows the install banner to be dismissed', async () => {
     const user = userEvent.setup()
     render(<App />)

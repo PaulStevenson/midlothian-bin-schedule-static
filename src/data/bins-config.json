@@ -128,5 +128,29 @@
       "Plastic bags",
       "Treated wood & timber"
     ]
+  },
+  "Sp": {
+    "id": "Sp",
+    "name": "Supermarket Plastics",
+    "fullName": "Soft Plastics (Supermarket Drop-off)",
+    "color": "#0f766e",
+    "badgeClass": "bg-teal-700 text-white",
+    "frequency": "Not collected at kerbside",
+    "summary": "For soft plastics that are labelled supermarket bag-drop only.",
+    "acceptedItems": [
+      "Bread bags and bakery wrappers",
+      "Fruit and veg bags",
+      "Crisp, snack and confectionery wrappers",
+      "Plastic film from multipacks",
+      "Carrier bags and soft wrap accepted by store points",
+      "Empty packaging that is clean and dry"
+    ],
+    "rejectedItems": [
+      "Plastic items marked kerbside recyclable (use Blue Bin)",
+      "Food-contaminated wrapping",
+      "Compostable or biodegradable plastic",
+      "Non-plastic attachments such as paper labels or receipts",
+      "Anything marked not recyclable"
+    ]
   }
 }

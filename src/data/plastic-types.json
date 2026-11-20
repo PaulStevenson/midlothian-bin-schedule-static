@@ -1,0 +1,86 @@
+[
+  {
+    "code": "1",
+    "symbol": "PETE",
+    "plasticType": "Polyethylene terephthalate",
+    "typicalItems": [
+      "Soft drink bottles",
+      "Water bottles",
+      "Cooking oil bottles"
+    ],
+    "route": "Kerbside",
+    "notes": "Usually accepted in kerbside recycling when empty and rinsed."
+  },
+  {
+    "code": "2",
+    "symbol": "HDPE",
+    "plasticType": "High-density polyethylene",
+    "typicalItems": [
+      "Milk bottles",
+      "Shampoo bottles",
+      "Cleaning product bottles"
+    ],
+    "route": "Kerbside",
+    "notes": "Widely accepted kerbside. Keep lids on if local guidance says so."
+  },
+  {
+    "code": "3",
+    "symbol": "PVC",
+    "plasticType": "Polyvinyl chloride",
+    "typicalItems": [
+      "Some trays",
+      "Blister-style packaging",
+      "Rigid PVC packs"
+    ],
+    "route": "Not accepted",
+    "notes": "Often not accepted in household kerbside collections."
+  },
+  {
+    "code": "4",
+    "symbol": "LDPE",
+    "plasticType": "Low-density polyethylene",
+    "typicalItems": [
+      "Shopping bags",
+      "Soft film wrap",
+      "Squeeze-pack film"
+    ],
+    "route": "Supermarket drop-off",
+    "notes": "Typically taken at large supermarket soft-plastic points."
+  },
+  {
+    "code": "5",
+    "symbol": "PP",
+    "plasticType": "Polypropylene",
+    "typicalItems": [
+      "Yoghurt pots",
+      "Margarine tubs",
+      "Food trays"
+    ],
+    "route": "Kerbside",
+    "notes": "Commonly accepted kerbside in many UK areas, if clean and dry."
+  },
+  {
+    "code": "6",
+    "symbol": "PS",
+    "plasticType": "Polystyrene",
+    "typicalItems": [
+      "Takeaway foam containers",
+      "Disposable cutlery",
+      "Protective packaging foam"
+    ],
+    "route": "Not accepted",
+    "notes": "Usually not accepted in kerbside collections."
+  },
+  {
+    "code": "7",
+    "symbol": "OTHER",
+    "plasticType": "Mixed or other plastics",
+    "typicalItems": [
+      "Crisp packets",
+      "Multi-layer wrappers",
+      "Mixed-material pouches"
+    ],
+    "route": "Supermarket drop-off",
+    "notes": "Some items can be supermarket drop-off; many are not recyclable. Check OPRL label."
+  }
+]

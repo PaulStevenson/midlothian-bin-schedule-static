@@ -62,3 +62,5 @@ If collection dates change, update `src/data/schedule-data.json` first.
 
 - The app currently targets one postcode and schedule dataset (EH25 9AW).
 - For wider area support, extract schedule data into separate JSON or API-backed sources.
+- Plastic route guidance (Kerbside / Supermarket drop-off / Not accepted) is informed by Recycle Now symbols guidance and common UK resin-code patterns.
+- Local authority and retailer acceptance can vary; always check on-pack OPRL labels and local council guidance for final disposal rules.

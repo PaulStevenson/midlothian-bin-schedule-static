@@ -12,11 +12,12 @@ import {
   Download,
 } from 'lucide-react'
 import binsConfigData from './data/bins-config.json'
+import plasticTypesData from './data/plastic-types.json'
 import scheduleData from './data/schedule-data.json'
 import { usePushNotifications } from './hooks/usePushNotifications'
 import { ReminderCard } from './components/ReminderCard'
 
-export type BinKey = 'Fd' | 'Gy' | 'Gn' | 'Bl' | 'Rd' | 'Br'
+export type BinKey = 'Fd' | 'Gy' | 'Gn' | 'Bl' | 'Rd' | 'Br' | 'Sp'
 
 type BinConfig = {
   id: BinKey
@@ -49,6 +50,17 @@ type NextCollection = {
 
 type UpcomingCollection = { binKey: BinKey } & NextCollection
 
+type PlasticRoute = 'Kerbside' | 'Supermarket drop-off' | 'Not accepted'
+
+type PlasticType = {
+  code: string
+  symbol: string
+  plasticType: string
+  typicalItems: string[]
+  route: PlasticRoute
+  notes: string
+}
+
 type BeforeInstallPromptEvent = Event & {
   prompt: () => Promise<void>
   userChoice: Promise<{ outcome: 'accepted' | 'dismissed'; platform: string }>
@@ -56,6 +68,8 @@ type BeforeInstallPromptEvent = Event & {
 
 export const BINS_CONFIG: Record<BinKey, BinConfig> =
   binsConfigData as unknown as Record<BinKey, BinConfig>
+
+const PLASTIC_TYPES: PlasticType[] = plasticTypesData as PlasticType[]
 
 export const CALENDAR_DATA: MonthData[] = scheduleData as unknown as MonthData[]
 
@@ -559,11 +573,22 @@ function BinSummaries({
 }
 
 function RecyclingGuide() {
+  const getRouteBadgeClass = (route: PlasticRoute) => {
+    if (route === 'Kerbside') return 'bg-green-100 text-green-800 border-green-200'
+    if (route === 'Supermarket drop-off') {
+      return 'bg-blue-100 text-blue-800 border-blue-200'
+    }
+    return 'bg-slate-200 text-slate-700 border-slate-300'
+  }
+
   return (
     <div>
-      <h2 className="mb-4 flex items-center gap-2 text-lg font-bold text-slate-900">
-        <Info className="h-5 w-5 text-slate-600" /> What Goes in Your Bins? (Acceptance Guide)
-      </h2>
+      <div className="mb-4 rounded-xl border border-slate-200 bg-white px-4 py-3 shadow-sm">
+        <h2 className="flex items-center gap-2 text-lg font-bold text-slate-900">
+          <Info className="h-5 w-5 text-slate-600" />
+          <span>What Goes in Your Bins? (Acceptance Guide)</span>
+        </h2>
+      </div>
 
       <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
         {Object.entries(BINS_CONFIG).map(([key, config]) => (
@@ -610,6 +635,59 @@ function RecyclingGuide() {
             </div>
           </div>
         ))}
+      </div>
+
+      <div className="mt-6 overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm">
+        <div className="border-b border-slate-200 bg-slate-50 px-6 py-4">
+          <h3 className="text-base font-bold text-slate-900">Plastic Type Identifier</h3>
+          <p className="mt-1 text-xs text-slate-600">
+            Check the resin code (1-7) on packaging and use this guide to decide whether
+            it is usually kerbside, supermarket drop-off, or not accepted. Always check
+            OPRL label wording first.
+          </p>
+        </div>
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-slate-200 text-left text-xs">
+            <thead className="bg-slate-50 text-slate-600">
+              <tr>
+                <th className="px-4 py-3 font-semibold">Resin Code</th>
+                <th className="px-4 py-3 font-semibold">Plastic Type</th>
+                <th className="px-4 py-3 font-semibold">Common Examples</th>
+                <th className="px-4 py-3 font-semibold">Recycle Route</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y divide-slate-100 bg-white text-slate-700">
+              {PLASTIC_TYPES.map((item) => (
+                <tr key={item.code}>
+                  <td className="px-4 py-3 align-top font-semibold text-slate-900">
+                    {item.code} ({item.symbol})
+                  </td>
+                  <td className="px-4 py-3 align-top">
+                    <div className="font-semibold text-slate-900">{item.plasticType}</div>
+                    <div className="mt-1 text-[11px] text-slate-500">{item.notes}</div>
+                  </td>
+                  <td className="px-4 py-3 align-top">
+                    <ul className="space-y-1">
+                      {item.typicalItems.map((example) => (
+                        <li key={example} className="flex items-start gap-1.5">
+                          <span className="font-bold text-slate-400">•</span>
+                          <span>{example}</span>
+                        </li>
+                      ))}
+                    </ul>
+                  </td>
+                  <td className="px-4 py-3 align-top">
+                    <span
+                      className={`inline-flex rounded-full border px-2.5 py-1 font-semibold ${getRouteBadgeClass(item.route)}`}
+                    >
+                      {item.route}
+                    </span>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   )
